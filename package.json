@@ -1,0 +1,12 @@
+{
+    "name": "digi-market",
+    "private": true,
+    "scripts": {
+        "start:server": "npm run start --prefix server",
+        "start:client": "npm run dev --prefix client",
+        "start": "concurrently \"npm run start:server\" \"npm run start:client\""
+    },
+    "devDependencies": {
+        "concurrently": "^6.5.1"
+    }
+}
