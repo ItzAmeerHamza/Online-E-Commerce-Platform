@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UserOutputDto } from './dtos/user.dto';
 import { UpdateUserInputDto } from './dtos/edit-user.dto';
-import { hashPassword } from 'src/utils/hash-password';
+import { hashPassword } from '../utils/hash-password';
 import { CoreOutput } from 'src/common/dtos/output.dto';
 
 @Injectable()
