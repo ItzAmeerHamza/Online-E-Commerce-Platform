@@ -1,8 +1,10 @@
 export interface User {
-    fname: string;
-    lname: string;
-    age: number;
-    phone: string;
-    address: string;
-    password: string;
-  }
+  firstName: string;
+  lastName: string;
+  age: number;
+  phone: string;
+  address: string;
+  email: string;
+  password: string;
+  isAdmin: boolean;
+}

@@ -1,38 +1,64 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Query, Req } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, Query, Req, UseGuards, Patch } from '@nestjs/common';
 import { Request } from 'express';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dtos/create-user.dto';
 import { User } from './interfaces/user.interface';
+import { CoreOutput } from 'src/common/dtos/output.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
-    this.usersService.create(createUserDto);
-    return 'This action adds a new user';
+  @Post('signup')
+  async signup(@Body() createUserDto: CreateUserDto): Promise<CoreOutput> {
+    return this.usersService.signup(createUserDto);
   }
 
-  @Get()
-  async findAll(): Promise<User[]> {
-    return this.usersService.findAll();
+  @UseGuards(JwtAuthGuard)
+  @Get('')
+  getUser(@Req() { user: { id } }: RequestWithUser): Promise<UserOutputDto> {
+    return this.usersService.findById(id);
   }
 
-  @Get(':id')
-  findOne(@Param() params: any): string {
-    console.log(params.id);
-    return `This action returns a #${params.id} user`;
+  @UseGuards(JwtAuthGuard)
+  @Patch('')
+  updateUser(
+    @Req() { user: { id } }: RequestWithUser,
+    @Body() updateUserDto: UpdateUserInputDto,
+  ): Promise<CoreOutput> {
+    return this.usersService.updateProfile(id, updateUserDto);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  @UseGuards(JwtAuthGuard)
+  @Post('address')
+  addAddress(
+    @Req() { user: { id } }: RequestWithUser,
+    @Body() addressDto: CreateAddressInputDto,
+  ): Promise<CoreOutput> {
+    return this.usersService.addAddress(addressDto, id);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return `This action removes a #${id} user`;
+  @UseGuards(JwtAuthGuard)
+  @Get('address')
+  readAddress(
+    @Req() { user: { id } }: RequestWithUser,
+  ): Promise<AddressOutputDto> {
+    return this.usersService.readAddress(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('address')
+  updateAddress(
+    @Req() { user: { id } }: RequestWithUser,
+    @Body() updateAddressDto: UpdateAddressInputDto,
+  ): Promise<CoreOutput> {
+    return this.usersService.updateAddress(id, updateAddressDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('address')
+  deleteAddress(@Req() { user: { id } }: RequestWithUser): Promise<CoreOutput> {
+    return this.usersService.deleteAddress(id);
   }
   
 }
