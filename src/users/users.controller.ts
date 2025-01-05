@@ -1,12 +1,13 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, Query, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserDto, ListAllEntities } from './dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './interfaces/user.interface';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
+
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     this.usersService.create(createUserDto);
