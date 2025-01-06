@@ -4,6 +4,7 @@ import {
   DashboardProductTable,
   DashboardSidebar,
 } from "@/components";
+
 import React from "react";
 
 const DashboardProducts = () => {

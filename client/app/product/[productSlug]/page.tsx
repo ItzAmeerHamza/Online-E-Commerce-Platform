@@ -6,7 +6,7 @@ import {
     SingleProductDynamicFields,
     AddToWishlistBtn,
   } from "client/components";
-  
+
   import Image from "next/image";
   import { notFound } from "next/navigation";
   import React from "react";
