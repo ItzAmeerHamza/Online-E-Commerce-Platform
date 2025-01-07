@@ -17,12 +17,6 @@ interface ImageItem {
   image: string;
 }
 
-interface SingleProductPageProps {
-  params: {
-    productSlug: string;
-  };
-}
-
 const SingleProductPage = async ({ params }: SingleProductPageProps) => {
   // sending API request for a single product with a given product slug
   const data = await fetch(

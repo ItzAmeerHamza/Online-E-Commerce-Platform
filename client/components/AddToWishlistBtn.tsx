@@ -136,7 +136,9 @@
 // };
 
 const AddToWishlistBtn = () => {
-return <><button>AddToWishlistBtn</button></>
+return <>
+  <button>AddToWishlistBtn</button>
+</>
 
 };
 export default AddToWishlistBtn;

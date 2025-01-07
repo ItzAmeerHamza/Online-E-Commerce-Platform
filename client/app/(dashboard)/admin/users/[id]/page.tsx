@@ -1,9 +1,9 @@
 "use client";
-import { DashboardSidebar } from "@/components";
+import DashboardSidebar from "../../../../../components/DashboardSidebar";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { isValidEmailAddressFormat } from "@/lib/utils";
+import { isValidEmailAddressFormat } from "../../../../lib/utils";
 
 interface DashboardUserDetailsProps {
   params: { id: number };

@@ -5,11 +5,6 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-interface Category {
-  id: string;
-  name: string;
-}
-
 const AddNewProduct = () => {
   const [product, setProduct] = useState<{
     title: string;

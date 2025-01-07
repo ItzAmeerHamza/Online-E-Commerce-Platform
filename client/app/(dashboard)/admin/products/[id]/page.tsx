@@ -16,31 +16,6 @@ interface DashboardProductDetailsProps {
   params: { id: number };
 }
 
-interface Product {
-  id: string;
-  slug: string;
-  title: string;
-  price: number;
-  rating: number;
-  description: string;
-  mainImage: string;
-  manufacturer: string;
-  categoryId: string;
-  // category: {name: string}?;
-  inStock: number;
-}
-
-interface Category {
-  id: string;
-  name: string;
-}
-
-interface OtherImages {
-  imageID: number;
-  productID: number;
-  image: string;
-}
-
 const DashboardProductDetails = ({
   params: { id },
 }: DashboardProductDetailsProps) => {

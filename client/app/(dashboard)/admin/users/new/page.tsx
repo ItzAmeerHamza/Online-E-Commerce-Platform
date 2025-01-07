@@ -1,6 +1,6 @@
 "use client";
-import { DashboardSidebar } from "@/components";
-import { isValidEmailAddressFormat } from "@/lib/utils";
+import DashboardSidebar from "../../../../../components/DashboardSidebar";
+import { isValidEmailAddressFormat } from "../../../../lib/utils";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
