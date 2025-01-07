@@ -1,9 +1,14 @@
 "use client";
-import { DashboardSidebar } from "@/components";
-import { convertCategoryNameToURLFriendly as convertSlugToURLFriendly } from "@/utils/categoryFormating";
+import DashboardSidebar from "../../../../../components/DashboardSidebar";
+// import { convertCategoryNameToURLFriendly as convertSlugToURLFriendly } from "@/utils/categoryFormating";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+
+interface Category {
+  id: string;
+  name: string;
+}
 
 const AddNewProduct = () => {
   const [product, setProduct] = useState<{
@@ -139,7 +144,7 @@ const AddNewProduct = () => {
             <div className="label">
               <span className="label-text">Product slug:</span>
             </div>
-            <input
+            {/* <input
               type="text"
               className="input input-bordered w-full max-w-xs"
               value={convertSlugToURLFriendly(product?.slug)}
@@ -149,7 +154,7 @@ const AddNewProduct = () => {
                   slug: convertSlugToURLFriendly(e.target.value),
                 })
               }
-            />
+            /> */}
           </label>
         </div>
 

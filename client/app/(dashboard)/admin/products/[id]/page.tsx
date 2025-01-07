@@ -1,5 +1,7 @@
 "use client";
-import { CustomButton, DashboardSidebar, SectionTitle } from "@/components";
+import CustomButton from "../../../../../components/CustomButton";
+import DashboardSidebar from "../../../../../components/DashboardSidebar";
+import SectionTitle  from "../../../../../components/SectionTitle";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -12,6 +14,31 @@ import { nanoid } from "nanoid";
 
 interface DashboardProductDetailsProps {
   params: { id: number };
+}
+
+interface Product {
+  id: string;
+  slug: string;
+  title: string;
+  price: number;
+  rating: number;
+  description: string;
+  mainImage: string;
+  manufacturer: string;
+  categoryId: string;
+  // category: {name: string}?;
+  inStock: number;
+}
+
+interface Category {
+  id: string;
+  name: string;
+}
+
+interface OtherImages {
+  imageID: number;
+  productID: number;
+  image: string;
 }
 
 const DashboardProductDetails = ({
@@ -198,7 +225,7 @@ const DashboardProductDetails = ({
             <div className="label">
               <span className="label-text">Slug:</span>
             </div>
-            <input
+            {/* <input
               type="text"
               className="input input-bordered w-full max-w-xs"
               value={product?.slug && convertSlugToURLFriendly(product?.slug)}
@@ -208,7 +235,7 @@ const DashboardProductDetails = ({
                   slug: convertSlugToURLFriendly(e.target.value),
                 })
               }
-            />
+            /> */}
           </label>
         </div>
         {/* Product slug input div - end */}
@@ -261,7 +288,7 @@ const DashboardProductDetails = ({
 
         {/* Main image file upload div - start */}
         <div>
-          <input
+          {/* <input
             type="file"
             className="file-input file-input-bordered file-input-lg w-full max-w-sm"
             onChange={(e) => {
@@ -272,7 +299,7 @@ const DashboardProductDetails = ({
                 setProduct({ ...product!, mainImage: selectedFile.name });
               }
             }}
-          />
+          /> */}
           {product?.mainImage && (
             <Image
               src={`/` + product?.mainImage}
