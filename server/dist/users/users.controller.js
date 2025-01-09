@@ -16,6 +16,7 @@ exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const create_user_dto_1 = require("./dtos/create-user.dto");
+const login_user_dto_1 = require("./dtos/login-user.dto");
 const common_2 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
 let JwtAuthGuard = class JwtAuthGuard extends (0, passport_1.AuthGuard)('jwt') {
@@ -30,6 +31,16 @@ let UsersController = class UsersController {
     async signup(createUserDto) {
         return this.usersService.signup(createUserDto);
     }
+    async signin(userDTO) {
+        const user = await this.usersService.findByLogin(userDTO);
+        const payload = {
+            email: user.email,
+        };
+        const token = await this.authService.signPayload(payload);
+        return {
+            user, token
+        };
+    }
 };
 exports.UsersController = UsersController;
 __decorate([
@@ -39,6 +50,13 @@ __decorate([
     __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "signup", null);
+__decorate([
+    (0, common_1.Post)('signin'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [login_user_dto_1.LoginDto]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "signin", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UserService])

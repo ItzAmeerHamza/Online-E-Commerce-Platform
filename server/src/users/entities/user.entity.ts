@@ -1,8 +1,11 @@
 import { CoreEntity } from '../../common/entities/core.entity';
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User extends CoreEntity {
+  @PrimaryGeneratedColumn('uuid')
+  userId: String;
+
   @Column({ unique: true })
   email: string;
 
