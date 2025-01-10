@@ -1,8 +1,10 @@
 import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { ProductOutputDto } from './dtos/product.dto';
+import { CreateProductDto } from './dtos/create-product.dto';
+import { UpdateProductDto } from './dtos/update-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -10,6 +12,42 @@ export class ProductService {
     @InjectRepository(Product)
     private products: Repository<Product>,
   ) {}
+
+  async createProduct(createproductdto: CreateProductDto): Promise<Product> {
+    const { name, description, price, quantity } = createproductdto
+    const newProduct = this.products.create({
+      name,
+      description,
+      price,
+      quantity
+    });
+
+    return await this.products.save(newProduct);
+  }
+
+  async updateProduct(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
+    const product = await this.products.preload({
+      productId: +id,
+      ...updateProductDto,
+    })
+    if(!product) {
+      throw new NotFoundException(`Product ${id} not found`)
+    }
+    return this.products.save(product)
+  }
+
+  async removeProduct(id: string): Promise<Product> {
+    const product = await this.findProductById(id)
+    return this.products.remove(product)
+  }
+
+  async findProductById(productId: string): Promise<Product> {
+    const user = await this.products.findOne({ where: {productId} });
+    if (!user) {
+      throw new NotFoundException(`Product with ID ${productId}} not found`);
+    }
+    return user;
+  }
 
   async findAll(params: PagenationOption): Promise<ProductOutputDto> {
     try {
