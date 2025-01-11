@@ -8,9 +8,7 @@ import {
   
   @Entity()
   export class CoreEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
-  
+
     @CreateDateColumn()
     createdAt: Date;
   

@@ -25,13 +25,13 @@ export class ProductService {
     return await this.products.save(newProduct);
   }
 
-  async updateProduct(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
+  async updateProduct(productId: string, updateProductDto: UpdateProductDto): Promise<Product> {
     const product = await this.products.preload({
-      productId: +id,
+      id: +productId,
       ...updateProductDto,
     })
     if(!product) {
-      throw new NotFoundException(`Product ${id} not found`)
+      throw new NotFoundException(`Product ${productId} not found`)
     }
     return this.products.save(product)
   }
