@@ -9,24 +9,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CoreEntity = void 0;
-const typeorm_1 = require("typeorm");
-let CoreEntity = class CoreEntity {
-};
-exports.CoreEntity = CoreEntity;
+exports.CreateProductDto = void 0;
+const class_validator_1 = require("class-validator");
+const output_dto_1 = require("../../common/dtos/output.dto");
+class CreateProductDto extends output_dto_1.CoreOutput {
+}
+exports.CreateProductDto = CreateProductDto;
 __decorate([
-    (0, typeorm_1.CreateDateColumn)(),
-    __metadata("design:type", Date)
-], CoreEntity.prototype, "createdAt", void 0);
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], CreateProductDto.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.UpdateDateColumn)(),
-    __metadata("design:type", Date)
-], CoreEntity.prototype, "updatedAt", void 0);
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Number)
+], CreateProductDto.prototype, "price", void 0);
 __decorate([
-    (0, typeorm_1.DeleteDateColumn)(),
-    __metadata("design:type", Date)
-], CoreEntity.prototype, "deletedAt", void 0);
-exports.CoreEntity = CoreEntity = __decorate([
-    (0, typeorm_1.Entity)()
-], CoreEntity);
-//# sourceMappingURL=core.entity.js.map
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Number)
+], CreateProductDto.prototype, "quantity", void 0);
+//# sourceMappingURL=create-product.dto.js.map

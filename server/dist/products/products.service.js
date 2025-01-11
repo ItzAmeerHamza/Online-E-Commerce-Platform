@@ -21,6 +21,37 @@ let ProductService = class ProductService {
     constructor(products) {
         this.products = products;
     }
+    async createProduct(createproductdto) {
+        const { name, description, price, quantity } = createproductdto;
+        const newProduct = this.products.create({
+            name,
+            description,
+            price,
+            quantity
+        });
+        return await this.products.save(newProduct);
+    }
+    async updateProduct(productId, updateProductDto) {
+        const product = await this.products.preload({
+            id: +productId,
+            ...updateProductDto,
+        });
+        if (!product) {
+            throw new common_1.NotFoundException(`Product ${productId} not found`);
+        }
+        return this.products.save(product);
+    }
+    async removeProduct(id) {
+        const product = await this.findProductById(id);
+        return this.products.remove(product);
+    }
+    async findProductById(productId) {
+        const user = await this.products.findOne({ where: { productId } });
+        if (!user) {
+            throw new common_1.NotFoundException(`Product with ID ${productId}} not found`);
+        }
+        return user;
+    }
     async findAll(params) {
         try {
             const products = await this.products

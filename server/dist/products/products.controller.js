@@ -15,12 +15,41 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductController = void 0;
 const common_1 = require("@nestjs/common");
 const products_service_1 = require("./products.service");
+const create_product_dto_1 = require("./dtos/create-product.dto");
+const update_product_dto_1 = require("./dtos/update-product.dto");
 let ProductController = class ProductController {
     constructor(productService) {
         this.productService = productService;
     }
     async getProduct(params) {
         return this.productService.findAll(params);
+    }
+    async createProduct(data) {
+        return {
+            statusCode: common_1.HttpStatus.OK,
+            message: 'Product added successfully',
+            data: await this.productService.createProduct(data),
+        };
+    }
+    async readProduct(id) {
+        return {
+            statusCode: common_1.HttpStatus.OK,
+            data: await this.productService.removeProduct(id),
+        };
+    }
+    async uppdateProduct(id, data) {
+        return {
+            statusCode: common_1.HttpStatus.OK,
+            message: 'Product update successfully',
+            data: await this.productService.updateProduct(id, data),
+        };
+    }
+    async deleteProduct(id) {
+        await this.productService.removeProduct(id);
+        return {
+            statusCode: common_1.HttpStatus.OK,
+            message: 'Product deleted successfully',
+        };
     }
     async getProductByCategory(params, categoryID) {
         return this.productService.findAllByCategory(categoryID, params);
@@ -37,6 +66,35 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "getProduct", null);
+__decorate([
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_product_dto_1.CreateProductDto]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "createProduct", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "readProduct", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_product_dto_1.UpdateProductDto]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "uppdateProduct", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "deleteProduct", null);
 __decorate([
     (0, common_1.Get)(':id(\\d+)'),
     __param(0, (0, common_1.Query)()),

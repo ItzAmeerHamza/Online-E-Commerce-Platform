@@ -16,6 +16,10 @@ let User = class User extends core_entity_1.CoreEntity {
 };
 exports.User = User;
 __decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    __metadata("design:type", String)
+], User.prototype, "userId", void 0);
+__decorate([
     (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);

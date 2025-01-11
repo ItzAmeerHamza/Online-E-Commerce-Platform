@@ -1,14 +1,20 @@
-import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import { User } from '../users/entities/user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { UserOutputDto } from './dtos/user.dto';
-import { UpdateUserInputDto } from './dtos/edit-user.dto';
-import { CoreOutput } from 'src/common/dtos/output.dto';
+import { LoginDto } from './dtos/login-user.dto';
+import { JwtService } from '@nestjs/jwt';
 export declare class UserService {
-    private readonly users;
-    constructor(users: Repository<User>);
-    signup({ email, password, firstName, lastName, phone, address, age, }: CreateUserDto): Promise<CoreOutput>;
-    findById(id: number): Promise<UserOutputDto>;
-    findByEmail(email: string): Promise<UserOutputDto>;
-    updateProfile(userId: number, updateUserDto: UpdateUserInputDto): Promise<CoreOutput>;
+    private readonly userRepository;
+    private readonly jwtService;
+    private readonly jwtsecret;
+    constructor(userRepository: Repository<User>, jwtService: JwtService);
+    signup(createuserdto: CreateUserDto): Promise<User>;
+    login(loginuserdto: LoginDto): Promise<{
+        user: User;
+        accessToken: string;
+    }>;
+    validateToken(token: string): Promise<any>;
+    findById(userId: string): Promise<User>;
+    deleteUserById(userId: string): Promise<void>;
+    findAll(): Promise<User[]>;
 }

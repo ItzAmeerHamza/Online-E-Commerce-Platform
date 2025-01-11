@@ -15,73 +15,76 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const user_entity_1 = require("./entities/user.entity");
 const typeorm_2 = require("typeorm");
-const hash_password_1 = require("../utils/hash-password");
+const user_entity_1 = require("../users/entities/user.entity");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const jwt_1 = require("@nestjs/jwt");
 let UserService = class UserService {
-    constructor(users) {
-        this.users = users;
+    constructor(userRepository, jwtService) {
+        this.userRepository = userRepository;
+        this.jwtService = jwtService;
+        this.jwtsecret = 'JWTSECRET';
     }
-    async signup({ email, password, firstName, lastName, phone = '', address = '', age = 0, }) {
-        try {
-            const exists = await this.users.findOne({ where: { email } });
-            if (exists) {
-                return { success: false, error: 'User already exists' };
-            }
-            password = await (0, hash_password_1.hashPassword)(password);
-            const user = this.users.create({
-                email,
-                password,
-                firstName,
-                lastName,
-                phone,
-                address,
-                age,
-            });
-            await this.users.save(user);
-            return { success: true };
+    async signup(createuserdto) {
+        const { email, password, phone, address, firstName, lastName, age } = createuserdto;
+        const existingUser = await this.userRepository.findOne({ where: { email } });
+        if (existingUser) {
+            throw new common_1.BadRequestException('Username already exists');
         }
-        catch (error) {
-            return { success: false, error: "Couldn't create account" };
-        }
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = this.userRepository.create({
+            email,
+            password: hashedPassword,
+            phone,
+            address,
+            firstName,
+            lastName,
+            age
+        });
+        return this.userRepository.save(newUser);
     }
-    async findById(id) {
-        try {
-            const user = await this.users.findOneOrFail({ where: { id } });
-            return { success: true, user };
+    async login(loginuserdto) {
+        const { email, password } = loginuserdto;
+        const user = await this.userRepository.findOne({ where: { email } });
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            throw new common_1.UnauthorizedException('Invalid credentials');
         }
-        catch (error) {
-            return { success: false, error: "Couldn't find user" };
-        }
+        const payload = { email: user.email, userid: user.userId };
+        const accessToken = await this.jwtService.signAsync(payload);
+        return { user, accessToken };
     }
-    async findByEmail(email) {
+    async validateToken(token) {
         try {
-            const user = await this.users.findOneOrFail({ where: { email } });
-            return { success: true, user };
+            const decoded = jwt.verify(token, this.jwtsecret);
+            return decoded;
         }
-        catch (error) {
-            return { success: false, error: "Couldn't find user" };
+        catch (err) {
+            return null;
         }
     }
-    async updateProfile(userId, updateUserDto) {
-        try {
-            const user = await this.users.findOneOrFail({ where: { id: userId } });
-            if (updateUserDto.password) {
-                updateUserDto.password = await (0, hash_password_1.hashPassword)(updateUserDto.password);
-            }
-            Object.assign(user, updateUserDto);
-            await this.users.save(user);
-            return { success: true };
+    async findById(userId) {
+        const user = await this.userRepository.findOne({ where: { userId } });
+        if (!user) {
+            throw new common_1.NotFoundException(`User with ID ${userId}} not found`);
         }
-        catch (error) {
-            return { success: false, error: "Couldn't find user" };
+        return user;
+    }
+    async deleteUserById(userId) {
+        const result = await this.userRepository.delete(userId);
+        if (result.affected === 0) {
+            throw new common_1.NotFoundException(`User with ID ${userId} not found.`);
         }
+    }
+    async findAll() {
+        return await this.userRepository.find();
     }
 };
 exports.UserService = UserService;
 exports.UserService = UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        jwt_1.JwtService])
 ], UserService);
 //# sourceMappingURL=users.service.js.map

@@ -12,53 +12,72 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UsersController = void 0;
+exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const create_user_dto_1 = require("./dtos/create-user.dto");
-const login_user_dto_1 = require("./dtos/login-user.dto");
-const common_2 = require("@nestjs/common");
-const passport_1 = require("@nestjs/passport");
-let JwtAuthGuard = class JwtAuthGuard extends (0, passport_1.AuthGuard)('jwt') {
-};
-JwtAuthGuard = __decorate([
-    (0, common_2.Injectable)()
-], JwtAuthGuard);
-let UsersController = class UsersController {
+let UserController = class UserController {
     constructor(usersService) {
         this.usersService = usersService;
     }
-    async signup(createUserDto) {
-        return this.usersService.signup(createUserDto);
+    async signup(createUserdto) {
+        return this.usersService.signup(createUserdto);
     }
-    async signin(userDTO) {
-        const user = await this.usersService.findByLogin(userDTO);
-        const payload = {
-            email: user.email,
-        };
-        const token = await this.authService.signPayload(payload);
-        return {
-            user, token
-        };
+    async login(createUserdto) {
+        const user = await this.usersService.login(createUserdto);
+        if (!user) {
+            throw new common_1.BadRequestException('Invalid credentials');
+        }
+        return user;
+    }
+    async findById(id) {
+        return this.usersService.findById(id);
+    }
+    async deleteUser(userId) {
+        await this.usersService.deleteUserById(userId);
+        return { message: `User with ID ${userId} has been deleted.` };
+    }
+    async getAllUsers() {
+        return await this.usersService.findAll();
     }
 };
-exports.UsersController = UsersController;
+exports.UserController = UserController;
 __decorate([
     (0, common_1.Post)('signup'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
     __metadata("design:returntype", Promise)
-], UsersController.prototype, "signup", null);
+], UserController.prototype, "signup", null);
 __decorate([
-    (0, common_1.Post)('signin'),
+    (0, common_1.Post)('login'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [login_user_dto_1.LoginDto]),
+    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
     __metadata("design:returntype", Promise)
-], UsersController.prototype, "signin", null);
-exports.UsersController = UsersController = __decorate([
+], UserController.prototype, "login", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "findById", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "deleteUser", null);
+__decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getAllUsers", null);
+exports.UserController = UserController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UserService])
-], UsersController);
+], UserController);
 //# sourceMappingURL=users.controller.js.map

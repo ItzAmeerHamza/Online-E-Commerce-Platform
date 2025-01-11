@@ -1,10 +1,17 @@
 import { UserService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { LoginDto } from './dtos/login-user.dto';
-import { CoreOutput } from 'src/common/dtos/output.dto';
-export declare class UsersController {
+import { User } from 'src/users/entities/user.entity';
+export declare class UserController {
     private readonly usersService;
     constructor(usersService: UserService);
-    signup(createUserDto: CreateUserDto): Promise<CoreOutput>;
-    signin(userDTO: LoginDto): Promise<CoreOutput>;
+    signup(createUserdto: CreateUserDto): Promise<User>;
+    login(createUserdto: CreateUserDto): Promise<{
+        user: User;
+        accessToken: string;
+    }>;
+    findById(id: string): Promise<User>;
+    deleteUser(userId: string): Promise<{
+        message: string;
+    }>;
+    getAllUsers(): Promise<User[]>;
 }
