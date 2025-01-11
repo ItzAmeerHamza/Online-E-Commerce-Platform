@@ -2,7 +2,10 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
+import { ProductsModule } from './products/products.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './users/entities/user.entity';
+import { Product } from './products/entities/product.entity';
 
 
 @Module({
@@ -14,12 +17,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'market_db_user',
       password: 'password',
       database: 'marketdb',
-      entities: [],
+      entities: [
+        User,
+        Product
+      ],
       synchronize: true,
     }),
-    UsersModule
+    UsersModule,
+    ProductsModule
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
